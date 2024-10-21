@@ -20,8 +20,8 @@ class AddressBook(UserDict):
         upcoming_birthdays = []
 
         for record in self.data.values():
-            if record._birthday:
-                birthday_date = record._birthday.value
+            if record.birthday:
+                birthday_date = record.birthday.value
                 birthday_this_year = self._get_birthday_this_year(birthday_date, today)
 
                 if self._is_upcoming_birthday(birthday_this_year, today):
@@ -32,7 +32,8 @@ class AddressBook(UserDict):
                     })
         return upcoming_birthdays
 
-    def _get_birthday_this_year(self, birthday, today):
+    def _get_birthday_this_year(self, birthday_str, today):
+        birthday = datetime.strptime(birthday_str, "%d.%m.%Y").date()
         birthday_this_year = birthday.replace(year=today.year)
         if birthday_this_year < today:
             birthday_this_year = birthday.replace(year=today.year + 1)

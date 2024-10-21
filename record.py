@@ -11,11 +11,11 @@ class Name(Field):
 class Record:
     def __init__(self, name):
         self.name = Name(name)
-        self.phones: list[Phone] = []
-        self._birthday = None
+        self.phones: list[Phone] = [] #type: ignore
+        self.birthday:Optional[Birthday] = None #type: ignore
     
     def add_birthday(self, birthday_str: str) -> None:
-        self._birthday = Birthday(birthday_str)
+        self.birthday = Birthday(birthday_str)
 
     def add_phone(self, phone) -> None:
         self.phones.append(Phone(phone))
@@ -33,8 +33,9 @@ class Record:
     
     def __str__(self):
         phones = ", ".join([str(phone) for phone in self.phones])
-        birthday_str = f", Birthday: {self._birthday.value.strftime('%Y-%m-%d')}" if self._birthday else ""
+        birthday_str = f", Birthday: {self.birthday.value}" if self.birthday else ""
         return f"Contact name: {self.name}, Phones: {phones}{birthday_str}"
+
     
     def edit_phone(self, old_phone: str, new_phone: str):
         for index, p in enumerate(self.phones):

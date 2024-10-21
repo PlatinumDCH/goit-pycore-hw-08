@@ -98,8 +98,8 @@ def add_birthday(book: AddressBook, args):
 def show_birthday(book: AddressBook, args):
     name = args[0]
     record = book.find(name)
-    if record and record._birthday:
-        return f'{name}: {record._birthday}'
+    if record and record.birthday:
+        return f'{name}: {record.birthday}'
     else:
         return "Contact not found."
 
@@ -121,7 +121,7 @@ def show_command():
         "6. del [name]- Delete a contact.\n"
         "7. hello - greets the user.\n"
         "8. close / exit - Exit the program.\n"
-        "9. add-birthday [name] [date] -Y|M|D format.\n"
+        "9. add-birthday [name] [date] -DD.MM.YYYY format.\n"
         "10. show-birthday [name] - Show a contact's birthday.\n"
         "11. birthdays - Show birthdays for the next 7 days with the dates when they should be congratulated.\n"
     )
@@ -162,6 +162,4 @@ def main():
                 print('Invalid command. Type "help" for a list of available commands.')
 
 
-if __name__ == "__main__":
-    print("Welcome to the CLI assistant.")
-    main()
+
