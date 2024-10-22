@@ -31,9 +31,10 @@ class TestAddressBook(unittest.TestCase):
             Phone("123456789")  # Менее 10 цифр
         with self.assertRaises(ValidatePhone):
             Phone("12345678901")  # Более 10 цифр
+
     def test_valid_birthday(self):
         """Valid date"""
-        birthday = Birthday("2024.10.21")
+        birthday = Birthday("21.10.2024")
         self.assertEqual(birthday.value.year, 2024)
         self.assertEqual(birthday.value.month, 10)
         self.assertEqual(birthday.value.day, 21)
@@ -55,8 +56,8 @@ class TestAddressBook(unittest.TestCase):
         self.book = AddressBook()
         self.record1 = Record("John Doe")
         self.record2 = Record("Jane Doe")
-        self.record1.add_birthday("2024.10.25") 
-        self.record2.add_birthday("2024.10.27")
+        self.record1.add_birthday("25.10.2024")  # Изменен формат на DD.MM.YYYY
+        self.record2.add_birthday("27.10.2024")  # Изменен формат на DD.MM.YYYY
         self.book.add_record(self.record1)
         self.book.add_record(self.record2)
 
@@ -76,11 +77,11 @@ class TestAddressBook(unittest.TestCase):
         self.assertIsNone(result)
 
     def test_add_birthday(self):
-        self.record.add_birthday("2024.10.21")
-        self.assertIsNotNone(self.record._birthday)
-        self.assertEqual(self.record._birthday.value.year, 2024)
-        self.assertEqual(self.record._birthday.value.month, 10)
-        self.assertEqual(self.record._birthday.value.day, 21)
+        self.record.add_birthday("21.10.2024")  # Формат исправлен на DD.MM.YYYY
+        self.assertIsNotNone(self.record.birthday)
+        self.assertEqual(self.record.birthday.value.year, 2024)
+        self.assertEqual(self.record.birthday.value.month, 10)
+        self.assertEqual(self.record.birthday.value.day, 21)
 
     def test_edit_phone(self):
         self.record.add_phone("1234567890")
@@ -93,8 +94,8 @@ class TestAddressBook(unittest.TestCase):
 
     def test_str_method(self):
         self.record.add_phone("1234567890")
-        self.record.add_birthday("2024.10.21")
-        expected_str = "Contact name: John Doe, Phones: 1234567890, Birthday: 2024-10-21"
+        self.record.add_birthday("21.10.2024")  # Исправлен формат
+        expected_str = "Contact name: John Doe, Phones: 1234567890, Birthday: 2024-10-21"  # Указан нужный формат вывода
         self.assertEqual(str(self.record), expected_str)
 
     def test_add_record(self):
@@ -110,7 +111,6 @@ class TestAddressBook(unittest.TestCase):
         self.assertEqual(len(self.book.data), 1)
 
     def test_get_upcoming_birthdays(self):
-
         upcoming_birthdays = self.book.get_upcoming_birthdays()
         self.assertEqual(len(upcoming_birthdays), 2)
 
@@ -148,16 +148,18 @@ class TestAddressBook(unittest.TestCase):
         self.assertIn("Contact name: Jane Doe", response)
 
     def test_add_birthday_2(self):
-        response = add_birthday(self.book, ["John Doe", "2024.11.30"])
+        response = add_birthday(self.book, ["John Doe", "30.11.2024"])  # Исправлен формат даты
         self.assertEqual(response, "Birthday added.")
-        self.assertIsNotNone(self.book.find("John Doe")._birthday)
+        self.assertIsNotNone(self.book.find("John Doe").birthday)
 
     def test_show_birthday(self):
         response = show_birthday(self.book, ["John Doe"])
-        self.assertIn("John Doe: 2024-10-25", response)
+        self.assertIn("John Doe: 2024-10-25", response)  # Убедиться, что дата выводится в корректном формате
 
     def test_birthdays(self):
         response = birthdays(self.book)
         self.assertGreater(len(response), 0) 
+
+
 if __name__ == '__main__':
     unittest.main(verbosity=2)

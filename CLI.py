@@ -1,17 +1,26 @@
 from address_book import AddressBook
 from record import Record
+from phone import ValidatePhone
+from birthday import ValidatedDataBirthday
 
 
 def input_error(expected_args):
     def decorator(func):
         def wrapper(book, args):
-            if expected_args == 0:
+            try:
+                if expected_args == 0:
+                    return func(book, args)
+                if len(args) == 0:
+                    return f'Please enter arguments for the command'
+                if len(args) < expected_args:
+                    return f"Command expected {expected_args} arguments"
                 return func(book, args)
-            if len(args) == 0:
-                return f'Please enter arguments for the command'
-            if len(args) < expected_args:
-                return f"Command expected {expected_args} arguments"
-            return func(book, args)
+            except ValidatedDataBirthday:
+                return "Invalid date format. Please use DD.MM.YYYY"
+            except ValidatePhone:
+                return "Invalid phone number format. Please use a valid 10-digit number."
+            except Exception as e:
+                return f"An error occurred: {str(e)}"
         return wrapper
     return decorator
 
