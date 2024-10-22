@@ -2,7 +2,7 @@ from address_book import AddressBook
 from record import Record
 from phone import ValidatePhone
 from birthday import ValidatedDataBirthday
-
+from save_pickle import load_data, save_data
 
 def input_error(expected_args):
     def decorator(func):
@@ -138,7 +138,7 @@ def show_command():
 
 
 def main():
-    book = AddressBook()
+    book = load_data()
     while True:
         user_input = input("Enter a command: ").strip()
         cmd, *args = parse_input(user_input)
@@ -169,6 +169,7 @@ def main():
                 break
             case _:
                 print('Invalid command. Type "help" for a list of available commands.')
+    save_data(book)
 
 
 
